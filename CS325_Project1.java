@@ -10,8 +10,9 @@ public class CS325_Project1 {
         int inversionCount = 0;
         
         
-        inversionCount = bruteForce(myArray);
-        System.out.println("Inversioncount = " + inversionCount);
+        //inversionCount = bruteForce(myArray);
+        inversionCount = divideNConquer(myArray, 0, myArray.length-1);
+        System.out.println("Inversions = " + inversionCount);
     }
 
     public static int bruteForce(int[] myArray) {
@@ -21,7 +22,7 @@ public class CS325_Project1 {
 
         for (int i = 0; i < arrayLength; i++) {
             for (k = i+1; k < arrayLength; k++) {
-                if (myArray[k] < myArray[i])
+                if (myArray[i] > myArray[k])
                     counter++;
             }
         }
@@ -29,8 +30,23 @@ public class CS325_Project1 {
         return counter;
     }
     
-    public static int divideNConquer(int[] myArray) {
+    public static int divideNConquer(int[] myArray, int start, int end) {
+        int counter = 0;
+        int k;
         
-        return 0;
+        if(end-start <=0)
+            return 0;
+        
+        counter+= divideNConquer(myArray, start, (start+end)/2);    //Al
+        counter+= divideNConquer(myArray, (start+end)/2+1, end);     //Ar
+         
+        for(int i=start; i <= (start+end)/2; i++) { //Each element in Al
+            for(k=(start+end)/2+1; k <= end; k++) {   //Each element in Ar
+                if(myArray[i] > myArray[k])
+                    counter++;
+            }
+        }
+        
+        return counter;
     }
 }
