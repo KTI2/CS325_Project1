@@ -6,47 +6,22 @@ package cs325_project1;
 public class CS325_Project1 {
 
     public static void main(String[] args) {
-        int[] myArray = {4, 2, 5, 3, 1, 8};
-        int inversionCount = 0;
-        
-        
-        //inversionCount = bruteForce(myArray);
-        inversionCount = divideNConquer(myArray, 0, myArray.length-1);
-        System.out.println("Inversions = " + inversionCount);
-    }
+        int[] myArray = {1, 5, 4, 8, 10, 2, 6, 9, 12, 11, 3, 7};
+        int inversionCount;
 
-    public static int bruteForce(int[] myArray) {
-        int k;
-        int arrayLength = myArray.length;
-        int counter = 0;
-
-        for (int i = 0; i < arrayLength; i++) {
-            for (k = i+1; k < arrayLength; k++) {
-                if (myArray[i] > myArray[k])
-                    counter++;
-            }
-        }
-
-        return counter;
-    }
-    
-    public static int divideNConquer(int[] myArray, int start, int end) {
-        int counter = 0;
-        int k;
+        Counter counter = new Counter(myArray);
         
-        if(end-start <=0)
-            return 0;
+        inversionCount = counter.bruteForce();
+        System.out.println("Brute force inversions = " + inversionCount);
         
-        counter+= divideNConquer(myArray, start, (start+end)/2);    //Al
-        counter+= divideNConquer(myArray, (start+end)/2+1, end);     //Ar
-         
-        for(int i=start; i <= (start+end)/2; i++) { //Each element in Al
-            for(k=(start+end)/2+1; k <= end; k++) {   //Each element in Ar
-                if(myArray[i] > myArray[k])
-                    counter++;
-            }
-        }
+        inversionCount = counter.divideNConquer(0, counter.arrayLength - 1);
+        System.out.println("Divide and conquer inversions = " + inversionCount);
         
-        return counter;
+        counter.printArray();
+                
+        inversionCount = counter.mergeNCount();
+        System.out.println("Merge and count = " + inversionCount);
+        
+        counter.printArray();
     }
 }
