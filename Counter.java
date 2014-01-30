@@ -13,7 +13,7 @@ public class Counter {
 
     private int[] myArray;
     private int[] helperArray;
-    private int counter;
+    public int counter;
     public int arrayLength;
 
     public Counter(int[] inArray) {
@@ -34,6 +34,7 @@ public class Counter {
         for (int i = 0; i < arrayLength; i++) {
             for (k = i + 1; k < arrayLength; k++) {
                 if (myArray[i] > myArray[k]) {
+                    //System.out.printf("%d and %d are inverted\n", myArray[i], myArray[k]);
                     counter++;
                 }
             }
@@ -64,24 +65,16 @@ public class Counter {
         return counter;
     }
 
-    public int mergeNCount() {
-        counter = 0;
-        
-        mergeSort(0, (arrayLength-1)/2);
-        mergeSort((arrayLength-1)/2+1, arrayLength-1);
-        
-        return counter;
-    }
-
-    public void mergeSort(int start, int end) {
+    public int mergeNCount(int start, int end) {
         //This actually modifies the array
         if (start < end) {
-            int middle = start + (end - start) / 2;
-            mergeSort(start, middle);
-            mergeSort(middle + 1, end);
+            int middle = (start+end)/2;
+            mergeNCount(start, middle);
+            mergeNCount(middle + 1, end);
 
-            merge(start, middle, end);
+            merge(start, middle+1, end);
         }
+        return counter;
     }
 
     public void merge(int start, int middle, int end) {
@@ -90,32 +83,34 @@ public class Counter {
         }
 
         int i = start;
-        int j = middle + 1;
+        int j = middle;
         int k = start;
 
-        while (i <= middle && j <= end) {
+        while (i <= middle-1 && j <= end) {
             if (helperArray[i] <= helperArray[j]) {
-                myArray[k] = helperArray[i];
-                i++;
-                counter++;
+                myArray[k] = helperArray[i++];
             } else {
+                //System.out.printf("%d to %d are inverted\n",
+                        //helperArray[i], helperArray[j]);
                 myArray[k] = helperArray[j];
                 j++;
-                counter++;
+                counter+=middle-i;
             }
             k++;
         }
 
-        while (i <= middle) {
-            myArray[k] = helperArray[i];
-            k++;
-            i++;
+        while (i <= middle-1) {
+            myArray[k++] = helperArray[i++];
+        }
+        
+        while(j <= end) {
+            myArray[k++] = helperArray[j++];
         }
     }
-    
+
     public void printArray() {
         System.out.println("Printing array.");
-        for(int i = 0; i < arrayLength; i++) {
+        for (int i = 0; i < arrayLength; i++) {
             System.out.print(myArray[i] + " ");
         }
         System.out.println();

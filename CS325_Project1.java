@@ -18,8 +18,8 @@ public class CS325_Project1 {
         System.out.println("Divide and conquer inversions = " + inversionCount);
         
         counter.printArray();
-                
-        inversionCount = counter.mergeNCount();
+        counter.counter=0;
+        inversionCount = counter.mergeNCount(0, counter.arrayLength-1);
         System.out.println("Merge and count = " + inversionCount);
         
         counter.printArray();
