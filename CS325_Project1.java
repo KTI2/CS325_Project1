@@ -11,7 +11,74 @@ import java.io.FileReader;
 public class CS325_Project1 {
 
     public static void main(String[] args) {
+        //List<int[]> myList = readInput("C:/test_in.txt");
+        List<int[]> myList = generateRandomInts(10000);
+        testAlgorithms(myList);
+
+    }
+
+    public static List<int[]> generateRandomInts(int total) {
         List<int[]> myList = new ArrayList<>();
+        int[] tmpIntArray = new int[total];
+        Random rand = new Random();
+
+        for (int i = 0; i < 10; i++) {
+            for (int k = 0; k < total; k++) {
+                tmpIntArray[k] = rand.nextInt();
+            }
+            myList.add(tmpIntArray);
+        }
+        return myList;
+    }
+
+    public static void testAlgorithms(List<int[]> myList) {
+        int inversionCount;
+        int listNum = 1;
+        Counter counter;
+
+        double bruteForceTime = 0;
+        double divideNConquerTime = 0;
+        double mergeNCountTime = 0;
+
+        double tmpTime;
+
+        for (int[] item : myList) {
+            //System.out.println("List " + listNum++);
+            counter = new Counter(item);
+
+            //Brute Force
+            tmpTime = System.currentTimeMillis();
+            inversionCount = counter.bruteForce();
+            bruteForceTime += System.currentTimeMillis() - tmpTime;
+            //System.out.println("Brute force inversions = " + inversionCount);
+
+            //Divide and Conquer
+            tmpTime = System.currentTimeMillis();
+            inversionCount = counter.divideNConquer(0, counter.arrayLength - 1);
+            divideNConquerTime += System.currentTimeMillis() - tmpTime;
+            //System.out.println("Divide and conquer inversions = " + inversionCount);
+
+            //Merge and Count
+            tmpTime = System.currentTimeMillis();
+            counter.counter = 0;
+            inversionCount = counter.mergeNCount(0, counter.arrayLength - 1);
+            mergeNCountTime += System.currentTimeMillis() - tmpTime;
+            //System.out.printf("Merge and count = %d\n\n", inversionCount);
+        }
+
+        //Calculate average runtime
+        bruteForceTime /= 10.;
+        divideNConquerTime /= 10.;
+        mergeNCountTime /= 10.;
+
+        System.out.printf("Brute force runtime: %f milliseconds.\n", bruteForceTime);
+        System.out.printf("Divide and conquer runtime: %f milliseconds.\n", divideNConquerTime);
+        System.out.printf("Merge and count runtime: %f milliseconds.\n", mergeNCountTime);
+    }
+
+    public static List<int[]> readInput(String fileLoc) {
+        List<int[]> myList = new ArrayList<>();
+
         String[] tmpStringArray;
         int[] tmpIntArray;
         String line;
@@ -19,47 +86,25 @@ public class CS325_Project1 {
 
         try {
             System.out.println("Importing file.");
-            BufferedReader reader = new BufferedReader(new FileReader("C:/test_in.txt"));
-            
-            while((line = reader.readLine()) != null) {
+            BufferedReader reader = new BufferedReader(new FileReader(fileLoc));
+
+            while ((line = reader.readLine()) != null) {
                 tmpStringArray = line.split(",");
                 tmpIntArray = new int[tmpStringArray.length];
-                
-                i=0;
-                for(String item : tmpStringArray) {
+
+                i = 0;
+                for (String item : tmpStringArray) {
                     tmpIntArray[i++] = Integer.parseInt(item);
                 }
                 myList.add(tmpIntArray);
             }
         } catch (java.io.FileNotFoundException e) {
             e.printStackTrace();
-            return;
-        } catch(java.io.IOException e) {
+            return null;
+        } catch (java.io.IOException e) {
             e.printStackTrace();
-            return;
+            return null;
         }
-
-        int inversionCount;
-        int listNum = 1;
-        Counter counter;
-
-        for (int[] item : myList) {
-            System.out.println("List " + listNum);
-            counter = new Counter(item);
-
-            inversionCount = counter.bruteForce();
-            System.out.println(
-                    "Brute force inversions = " + inversionCount);
-
-            inversionCount = counter.divideNConquer(0, counter.arrayLength - 1);
-            System.out.println(
-                    "Divide and conquer inversions = " + inversionCount);
-
-            counter.counter = 0;
-            inversionCount = counter.mergeNCount(0, counter.arrayLength - 1);
-            System.out.printf(
-                    "Merge and count = %d\n\n", inversionCount);
-            listNum++;
-        }
+        return myList;
     }
 }
