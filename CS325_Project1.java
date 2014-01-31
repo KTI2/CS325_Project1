@@ -12,9 +12,41 @@ public class CS325_Project1 {
 
     public static void main(String[] args) {
         //List<int[]> myList = readInput("C:/test_in.txt");
-        List<int[]> myList = generateRandomInts(10000);
+        System.out.println("Size 1k");
+        List<int[]> myList = generateRandomInts(1000);
         testAlgorithms(myList);
 
+        System.out.println("Size 2k");
+        myList = generateRandomInts(2000);
+        testAlgorithms(myList);
+
+        System.out.println("Size 3k");
+        myList = generateRandomInts(3000);
+        testAlgorithms(myList);
+
+        System.out.println("Size 5k");
+        myList = generateRandomInts(5000);
+        testAlgorithms(myList);
+
+        System.out.println("Size 10k");
+        myList = generateRandomInts(10000);
+        testAlgorithms(myList);
+
+        System.out.println("Size 20k");
+        myList = generateRandomInts(20000);
+        testAlgorithms(myList);
+
+        System.out.println("Size 30k");
+        myList = generateRandomInts(30000);
+        testAlgorithms(myList);
+
+        System.out.println("Size 40k");
+        myList = generateRandomInts(40000);
+        testAlgorithms(myList);
+
+        System.out.println("Size 50k");
+        myList = generateRandomInts(50000);
+        testAlgorithms(myList);
     }
 
     public static List<int[]> generateRandomInts(int total) {
@@ -42,34 +74,37 @@ public class CS325_Project1 {
 
         double tmpTime;
 
-        for (int[] item : myList) {
-            //System.out.println("List " + listNum++);
-            counter = new Counter(item);
+        for (int i = 0; i < 10; i++) {
+            for (int[] item : myList) {
+                System.out.print(".");
+                //System.out.println("List " + listNum++);
+                counter = new Counter(item);
 
-            //Brute Force
-            tmpTime = System.currentTimeMillis();
-            inversionCount = counter.bruteForce();
-            bruteForceTime += System.currentTimeMillis() - tmpTime;
+                //Brute Force
+                tmpTime = System.currentTimeMillis();
+                inversionCount = counter.bruteForce();
+                bruteForceTime += System.currentTimeMillis() - tmpTime;
             //System.out.println("Brute force inversions = " + inversionCount);
 
-            //Divide and Conquer
-            tmpTime = System.currentTimeMillis();
-            inversionCount = counter.divideNConquer(0, counter.arrayLength - 1);
-            divideNConquerTime += System.currentTimeMillis() - tmpTime;
+                //Divide and Conquer
+                tmpTime = System.currentTimeMillis();
+                inversionCount = counter.divideNConquer(0, counter.arrayLength - 1);
+                divideNConquerTime += System.currentTimeMillis() - tmpTime;
             //System.out.println("Divide and conquer inversions = " + inversionCount);
 
-            //Merge and Count
-            tmpTime = System.currentTimeMillis();
-            counter.counter = 0;
-            inversionCount = counter.mergeNCount(0, counter.arrayLength - 1);
-            mergeNCountTime += System.currentTimeMillis() - tmpTime;
-            //System.out.printf("Merge and count = %d\n\n", inversionCount);
+                //Merge and Count
+                tmpTime = System.currentTimeMillis();
+                counter.counter = 0;
+                inversionCount = counter.mergeNCount(0, counter.arrayLength - 1);
+                mergeNCountTime += System.currentTimeMillis() - tmpTime;
+                //System.out.printf("Merge and count = %d\n\n", inversionCount);
+            }
+            System.out.println();
         }
-
         //Calculate average runtime
-        bruteForceTime /= 10.;
-        divideNConquerTime /= 10.;
-        mergeNCountTime /= 10.;
+        bruteForceTime /= 100.;
+        divideNConquerTime /= 100.;
+        mergeNCountTime /= 100.;
 
         System.out.printf("Brute force runtime: %f milliseconds.\n", bruteForceTime);
         System.out.printf("Divide and conquer runtime: %f milliseconds.\n", divideNConquerTime);
